@@ -86,18 +86,33 @@ struct SettingsViewHS: View {
                     showRestoreAlert = true
                 }
             } label: {
-                HStack(spacing: 6) {
-                    Image(systemName: "arrow.clockwise").font(.system(size: 12, weight: .semibold))
-                    Text("Restore Purchases").font(.system(size: 13, weight: .semibold))
+                HStack(spacing: 14) {
+                    ZStack {
+                        Circle()
+                            .fill(LinearGradient(colors: [Color(hex: "#FFD60A"), Color(hex: "#FF6A00")], startPoint: .topLeading, endPoint: .bottomTrailing))
+                            .frame(width: 40, height: 40)
+                        Image(systemName: "arrow.clockwise")
+                            .font(.system(size: 14, weight: .bold))
+                            .foregroundColor(.white)
+                    }
+                    VStack(alignment: .leading, spacing: 3) {
+                        Text("Restore Purchases")
+                            .font(.system(size: 14, weight: .semibold)).foregroundColor(.white)
+                        Text("Recover your unlocked themes")
+                            .font(.system(size: 12, weight: .regular)).foregroundColor(.white.opacity(0.4))
+                    }
+                    Spacer()
+                    Image(systemName: "chevron.right")
+                        .font(.system(size: 12, weight: .semibold)).foregroundColor(.white.opacity(0.3))
                 }
-                .foregroundColor(.white.opacity(0.4))
-                .frame(maxWidth: .infinity)
-                .padding(.vertical, 12)
-                .background(Color.white.opacity(0.05))
-                .clipShape(RoundedRectangle(cornerRadius: 12))
+                .padding(14)
+                .background(Color.white.opacity(0.06))
+                .overlay(RoundedRectangle(cornerRadius: 16).stroke(Color(hex: "#FFD60A").opacity(0.25), lineWidth: 0.8))
+                .clipShape(RoundedRectangle(cornerRadius: 16))
             }
             .buttonStyle(PlainButtonStyle())
             .padding(.horizontal, 20)
+
         }
     }
 
@@ -180,7 +195,7 @@ struct SettingsViewHS: View {
     // MARK: — Watch Tutorial (WebView)
     private var watchTutorialRow: some View {
         Button {
-            path.append(NavigationDestinationHS.webView("https://www.youtube.com/watch?v=75d_29QWELk"))
+            path.append(NavigationDestinationHS.webView("https://www.youtube.com/watch?v=EsVnC_c9Rxk"))
         } label: {
             HStack(spacing: 14) {
                 ZStack {

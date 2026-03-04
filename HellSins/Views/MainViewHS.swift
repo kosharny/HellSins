@@ -46,9 +46,6 @@ struct MainTabHostHS: View {
 
     private var tabLayout: some View {
         ZStack(alignment: .bottom) {
-            InfernoBackgroundHS()
-                .ignoresSafeArea()
-
             TabContentHS(path: $path)
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
 
@@ -57,6 +54,11 @@ struct MainTabHostHS: View {
                 .padding(.bottom, 20)
                 .ignoresSafeArea(edges: .bottom)
         }
+        .background(
+            InfernoBackgroundHS()
+                .ignoresSafeArea()
+                .environmentObject(vm)
+        )
         .ignoresSafeArea(edges: .bottom)
         .navigationBarHidden(true)
     }
@@ -67,14 +69,17 @@ struct TabContentHS: View {
     @Binding var path: NavigationPath
 
     var body: some View {
-        switch vm.selectedTab {
-        case 0: InfernoViewHS(path: $path)
-        case 1: TrialViewHS(path: $path)
-        case 2: PenanceViewHS(path: $path)
-        case 3: LibraryViewHS(path: $path)
-        case 4: JudgementViewHS(path: $path)
-        default: InfernoViewHS(path: $path)
+        Group {
+            switch vm.selectedTab {
+            case 0: InfernoViewHS(path: $path)
+            case 1: TrialViewHS(path: $path)
+            case 2: PenanceViewHS(path: $path)
+            case 3: LibraryViewHS(path: $path)
+            case 4: JudgementViewHS(path: $path)
+            default: InfernoViewHS(path: $path)
+            }
         }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 }
 

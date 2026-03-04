@@ -44,7 +44,16 @@ struct WebContainerViewHS: View {
                         .font(.system(size: 16, weight: .bold))
                         .foregroundColor(.white)
                     Spacer()
+                    HStack(spacing: 6) {
+                        Image(systemName: "chevron.left")
+                            .font(.system(size: 14, weight: .semibold))
+                        Text("Back")
+                            .font(.system(size: 16, weight: .semibold))
+                    }
+                    .foregroundColor(vm.currentTheme.primaryColor)
+                    .opacity(0)
                 }
+                .padding(.top, 60)
                 .padding(.horizontal, 20)
                 .padding(.vertical, 12)
                 .background(Color(hex: "#0F0F12").opacity(0.9))
@@ -58,6 +67,7 @@ struct WebContainerViewHS: View {
                 }
             }
         }
+        .ignoresSafeArea()
         .navigationBarHidden(true)
     }
 }

@@ -39,11 +39,11 @@ struct CustomTabBarHS: View {
                             .foregroundColor(vm.selectedTab == index ? vm.currentTheme.primaryColor : Color.white.opacity(0.3))
                     }
                     .frame(maxWidth: .infinity)
-                    .padding(.vertical, 18)
                 }
                 .buttonStyle(PlainButtonStyle())
             }
         }
+        .frame(height: 64)
         .padding(.horizontal, 8)
         .background(
             ZStack {

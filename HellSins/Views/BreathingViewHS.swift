@@ -78,28 +78,28 @@ struct BreathingViewHS: View {
         ZStack {
             ForEach(0..<4, id: \.self) { ring in
                 Circle()
-                    .stroke(phaseColor.opacity(0.06 - Double(ring) * 0.01), lineWidth: 1)
-                    .frame(width: CGFloat(180 + ring * 35), height: CGFloat(180 + ring * 35))
+                    .stroke(phaseColor.opacity(0.07 - Double(ring) * 0.015), lineWidth: 1.5)
+                    .frame(width: CGFloat(240 + ring * 40), height: CGFloat(240 + ring * 40))
                     .scaleEffect(circleScale * (1.0 + CGFloat(ring) * 0.05))
                     .animation(.easeInOut(duration: Double(phaseDuration)), value: circleScale)
             }
 
             ZStack {
                 Circle()
-                    .fill(RadialGradient(colors: [phaseColor.opacity(0.35), phaseColor.opacity(0.02)], center: .center, startRadius: 0, endRadius: 100))
-                    .frame(width: 200, height: 200)
+                    .fill(RadialGradient(colors: [phaseColor.opacity(0.4), phaseColor.opacity(0.02)], center: .center, startRadius: 0, endRadius: 130))
+                    .frame(width: 260, height: 260)
                     .scaleEffect(circleScale)
                     .animation(.easeInOut(duration: Double(phaseDuration)), value: circleScale)
 
-                VStack(spacing: 8) {
+                VStack(spacing: 10) {
                     Text("\(max(0, phaseDuration - secondsInPhase))")
-                        .font(.system(size: 56, weight: .black, design: .rounded))
+                        .font(.system(size: 80, weight: .black, design: .rounded))
                         .foregroundColor(.white)
                         .contentTransition(.numericText())
                     Text(isRunning ? phase.rawValue.uppercased() : "READY")
-                        .font(.system(size: 12, weight: .black))
+                        .font(.system(size: 15, weight: .black))
                         .foregroundColor(phaseColor)
-                        .tracking(2)
+                        .tracking(3)
                         .animation(.none, value: phase)
                 }
             }

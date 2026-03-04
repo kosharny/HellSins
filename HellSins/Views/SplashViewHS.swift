@@ -40,10 +40,6 @@ struct SplashViewHS: View {
                 Spacer().frame(height: 50)
 
                 VStack(spacing: 12) {
-                    Text("Loading... \(Int(loadingProgress * 100))%")
-                        .font(.system(size: 13, weight: .bold, design: .rounded))
-                        .foregroundColor(vm.currentTheme.primaryColor)
-                        .contentTransition(.numericText())
 
                     GeometryReader { geo in
                         ZStack(alignment: .leading) {

@@ -15,7 +15,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "DDDB2E522F56FEDE008CC22E"
+               BlueprintIdentifier = "99222E522F56FEDE008CC22E"
                BuildableName = "HellSins.app"
                BlueprintName = "HellSins"
                ReferencedContainer = "container:HellSins.xcodeproj">
@@ -44,7 +44,7 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "DDDB2E522F56FEDE008CC22E"
+            BlueprintIdentifier = "99222E522F56FEDE008CC22E"
             BuildableName = "HellSins.app"
             BlueprintName = "HellSins"
             ReferencedContainer = "container:HellSins.xcodeproj">
@@ -64,7 +64,7 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "DDDB2E522F56FEDE008CC22E"
+            BlueprintIdentifier = "99222E522F56FEDE008CC22E"
             BuildableName = "HellSins.app"
             BlueprintName = "HellSins"
             ReferencedContainer = "container:HellSins.xcodeproj">

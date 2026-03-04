@@ -8,19 +8,22 @@ struct GroundingViewHS: View {
     @State private var animateIn = false
     @State private var breatheExpand = false
 
+    private var isSmallScreen: Bool { UIScreen.main.bounds.height < 700 }
+
     struct GroundingStep {
         let number: String
         let senses: String
         let instruction: String
         let icon: String
+        let imageName: String
     }
 
     let steps: [GroundingStep] = [
-        GroundingStep(number: "5", senses: "SEE", instruction: "Name 5 things you can see right now. Look around slowly and identify them one by one.", icon: "eye.fill"),
-        GroundingStep(number: "4", senses: "TOUCH", instruction: "Name 4 things you can physically feel. The floor, your clothes, temperature, texture.", icon: "hand.raised.fill"),
-        GroundingStep(number: "3", senses: "HEAR", instruction: "Name 3 things you can hear. Close your eyes and listen. Distant sounds count too.", icon: "ear.fill"),
-        GroundingStep(number: "2", senses: "SMELL", instruction: "Name 2 things you can smell. Take slow, deep breaths through your nose.", icon: "wind"),
-        GroundingStep(number: "1", senses: "TASTE", instruction: "Name 1 thing you can taste. Swallow gently and notice any lingering sensation.", icon: "mouth.fill")
+        GroundingStep(number: "5", senses: "SEE",   instruction: "Name 5 things you can see right now. Look around slowly and identify them one by one.",     icon: "eye.fill",          imageName: "inferno_sos_breathe"),
+        GroundingStep(number: "4", senses: "TOUCH", instruction: "Name 4 things you can physically feel. The floor, your clothes, temperature, texture.",       icon: "hand.raised.fill",  imageName: "inferno_cold_shock"),
+        GroundingStep(number: "3", senses: "HEAR",  instruction: "Name 3 things you can hear. Close your eyes and listen. Distant sounds count too.",           icon: "ear.fill",          imageName: "inferno_breathing_chamber"),
+        GroundingStep(number: "2", senses: "SMELL", instruction: "Name 2 things you can smell. Take slow, deep breaths through your nose.",                      icon: "wind",               imageName: "inferno_sos_water"),
+        GroundingStep(number: "1", senses: "TASTE", instruction: "Name 1 thing you can taste. Swallow gently and notice any lingering sensation.",               icon: "mouth.fill",        imageName: "inferno_heart_flame")
     ]
 
     var body: some View {
@@ -28,10 +31,11 @@ struct GroundingViewHS: View {
             InfernoBackgroundHS()
             VStack(spacing: 0) {
                 topBar
+                heroImage
+                stepContent
                 Spacer()
                 breathingOrb
                 Spacer()
-                stepContent
                 bottomControls
             }
         }
@@ -40,6 +44,26 @@ struct GroundingViewHS: View {
             withAnimation { animateIn = true }
             startBreathing()
         }
+    }
+
+    private var heroImage: some View {
+        Image(steps[currentStep].imageName)
+            .resizable()
+            .scaledToFill()
+            .frame(maxWidth: .infinity)
+            .frame(height: 180)
+            .clipShape(RoundedRectangle(cornerRadius: 20))
+            .overlay(
+                RoundedRectangle(cornerRadius: 20)
+                    .fill(LinearGradient(
+                        colors: [Color.clear, Color(hex: "#0F0F12").opacity(0.85)],
+                        startPoint: .center,
+                        endPoint: .bottom
+                    ))
+            )
+            .padding(.horizontal, 16)
+            .padding(.top, 12)
+            .animation(.easeInOut(duration: 0.4), value: currentStep)
     }
 
     private var topBar: some View {
@@ -90,7 +114,7 @@ struct GroundingViewHS: View {
                         .font(.system(size: 52, weight: .black, design: .rounded))
                         .foregroundStyle(LinearGradient(colors: [Color(hex: "#FFD60A"), vm.currentTheme.primaryColor], startPoint: .top, endPoint: .bottom))
                     Text(breatheExpand ? "breathe in" : "breathe out")
-                        .font(.system(size: 11, weight: .semibold))
+                        .font(.system(size: isSmallScreen ? 9 : 11, weight: .semibold))
                         .foregroundColor(.white.opacity(0.5))
                         .animation(.none, value: breatheExpand)
                 }
@@ -99,32 +123,33 @@ struct GroundingViewHS: View {
     }
 
     private var stepContent: some View {
-        VStack(spacing: 16) {
-            HStack(spacing: 10) {
+        VStack(spacing: isSmallScreen ? 10 : 16) {
+            HStack(spacing: 8) {
                 Image(systemName: steps[currentStep].icon)
-                    .font(.system(size: 16, weight: .semibold))
+                    .font(.system(size: isSmallScreen ? 14 : 18, weight: .semibold))
                     .foregroundColor(vm.currentTheme.primaryColor)
                 Text(steps[currentStep].senses)
-                    .font(.system(size: 12, weight: .black))
+                    .font(.system(size: isSmallScreen ? 11 : 14, weight: .black))
                     .foregroundColor(vm.currentTheme.primaryColor)
                     .tracking(2)
             }
-            .padding(.horizontal, 16)
-            .padding(.vertical, 8)
+            .padding(.horizontal, 14).padding(.vertical, 8)
             .background(vm.currentTheme.primaryColor.opacity(0.12))
             .clipShape(Capsule())
 
             Text(steps[currentStep].instruction)
-                .font(.system(size: 16, weight: .regular))
-                .foregroundColor(.white.opacity(0.8))
+                .font(.system(size: isSmallScreen ? 13 : 18, weight: .medium))
+                .foregroundColor(.white.opacity(0.85))
                 .multilineTextAlignment(.center)
-                .lineSpacing(5)
-                .padding(.horizontal, 32)
+                .lineSpacing(isSmallScreen ? 4 : 6)
+                .lineLimit(nil)
+                .fixedSize(horizontal: false, vertical: true)
+                .padding(.horizontal, isSmallScreen ? 12 : 28)
                 .opacity(animateIn ? 1 : 0)
                 .offset(y: animateIn ? 0 : 16)
                 .animation(.easeOut(duration: 0.4), value: animateIn)
         }
-        .padding(.bottom, 24)
+        .padding(.vertical, isSmallScreen ? 12 : 20)
     }
 
     private var bottomControls: some View {

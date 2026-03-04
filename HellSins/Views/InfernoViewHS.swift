@@ -5,18 +5,22 @@ struct InfernoViewHS: View {
     @Binding var path: NavigationPath
 
     var body: some View {
-        ScrollView(showsIndicators: false) {
-            VStack(spacing: 20) {
-                CustomHeaderHS(title: "Inferno", path: $path)
-                statusBlock
-                heartOfFlameBlock
-                currentMissionCard
-                shadowProfileBlock
-                dailyFeedBlock
-                disciplineTools
-                Spacer(minLength: 120)
+        GeometryReader { proxy in
+            ScrollView(.vertical, showsIndicators: false) {
+                VStack(spacing: 20) {
+                    CustomHeaderHS(title: "Inferno", path: $path)
+                    statusBlock
+                    heartOfFlameBlock
+                    currentMissionCard
+                    shadowProfileBlock
+                    dailyFeedBlock
+                    disciplineTools
+                    Spacer(minLength: 120)
+                }
+                .padding(.horizontal, 20)
+                .frame(width: proxy.size.width)
             }
-            .padding(.horizontal, 20)
+            .frame(width: proxy.size.width)
         }
     }
 
@@ -45,16 +49,17 @@ struct InfernoViewHS: View {
                         Image(systemName: "bolt.fill").font(.system(size: 12, weight: .bold)).foregroundColor(vm.currentTheme.primaryColor)
                         Text("ENERGY").font(.system(size: 9, weight: .black)).foregroundColor(.white.opacity(0.4)).tracking(1.2)
                     }
-                    GeometryReader { geo in
-                        ZStack(alignment: .leading) {
-                            Capsule().fill(Color.white.opacity(0.08))
+                    Capsule()
+                        .fill(Color.white.opacity(0.08))
+                        .frame(height: 8)
+                        .overlay(alignment: .leading) {
                             Capsule()
                                 .fill(LinearGradient(colors: [vm.currentTheme.accentColor, vm.currentTheme.primaryColor], startPoint: .leading, endPoint: .trailing))
-                                .frame(width: max(8, geo.size.width * CGFloat(vm.profile.energy)))
+                                .scaleEffect(x: CGFloat(vm.profile.energy), y: 1, anchor: .leading)
+                                .frame(height: 8)
                                 .animation(.spring(response: 0.5), value: vm.profile.energy)
                         }
-                    }
-                    .frame(height: 8)
+
                     Text("\(Int(vm.profile.energy * 100))% charged")
                         .font(.system(size: 11, weight: .medium)).foregroundColor(.white.opacity(0.4))
                     Spacer(minLength: 0)
@@ -74,8 +79,8 @@ struct InfernoViewHS: View {
                 Text("HEART OF FLAME")
                     .font(.system(size: 10, weight: .black)).foregroundColor(.white.opacity(0.4)).tracking(1.5)
 
-                HStack(spacing: 32) {
-                    Spacer()
+                HStack(alignment: .center, spacing: 0) {
+                    Spacer(minLength: 0)
                     ZStack {
                         Circle().stroke(Color.white.opacity(0.06), lineWidth: 14).frame(width: 130, height: 130)
                         Circle()
@@ -93,7 +98,7 @@ struct InfernoViewHS: View {
                             Text("purified").font(.system(size: 9, weight: .semibold)).foregroundColor(.white.opacity(0.4))
                         }
                     }
-                    Spacer()
+                    Spacer(minLength: 24)
 
                     VStack(spacing: 12) {
                         Button { path.append(NavigationDestinationHS.grounding) } label: {
@@ -111,8 +116,10 @@ struct InfernoViewHS: View {
                         .buttonStyle(PlainButtonStyle())
                         Text("Grounding\ntechnique").font(.system(size: 9, weight: .medium)).foregroundColor(.white.opacity(0.3)).multilineTextAlignment(.center)
                     }
-                    Spacer()
+                    .frame(width: 72)
+                    Spacer(minLength: 0)
                 }
+
 
                 HStack(spacing: 0) {
                     let done = vm.habits.filter { $0.isCompletedToday }.count

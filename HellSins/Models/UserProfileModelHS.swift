@@ -8,6 +8,7 @@ struct UserProfileHS: Codable {
     var sinLevels: [String: Double]
     var onboardingDone: Bool
     var selectedTheme: AppThemeHS
+    var lastStreakDate: Date?
 
     init() {
         streakDays = 0
@@ -17,6 +18,7 @@ struct UserProfileHS: Codable {
         sinLevels = Dictionary(uniqueKeysWithValues: SinTypeHS.allCases.map { ($0.rawValue, Double.random(in: 0.1...0.8)) })
         onboardingDone = false
         selectedTheme = .ember
+        lastStreakDate = nil
     }
 
     var dominantSin: SinTypeHS? {

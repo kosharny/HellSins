@@ -21,12 +21,13 @@ class ViewModelHS: ObservableObject {
     private var cancellables = Set<AnyCancellable>()
 
 
-    private let profileKey = "hellsins.profile"
-    private let habitsKey = "hellsins.habits"
-    private let missionKey = "hellsins.mission"
-    private let sinsKey = "hellsins.sins"
+    private let profileKey  = "hellsins.profile"
+    private let habitsKey   = "hellsins.habits"
+    private let missionKey  = "hellsins.mission"
+    private let sinsKey     = "hellsins.sins"
     private let purchasesKey = "hellsins.purchases"
     private let activityKey = "hellsins.activity"
+    private let libraryKey  = "hellsins.library"
 
     private var energyTimer: Timer?
     private var missionTimer: Timer?
@@ -105,6 +106,7 @@ class ViewModelHS: ObservableObject {
             habits[index].lastCompletedDate = Date()
             profile.dailyPurificationPct = min(1.0, profile.dailyPurificationPct + 0.1)
             profile.globalScore += 10
+            recordDailyStreak()
         } else {
             habits[index].streak = max(0, habits[index].streak - 1)
             profile.dailyPurificationPct = max(0.0, profile.dailyPurificationPct - 0.1)
@@ -117,6 +119,7 @@ class ViewModelHS: ObservableObject {
         currentMission.isCheckedIn = true
         profile.globalScore += 25
         profile.dailyPurificationPct = min(1.0, profile.dailyPurificationPct + 0.2)
+        recordDailyStreak()
         saveAll()
     }
 
@@ -153,6 +156,16 @@ class ViewModelHS: ObservableObject {
     func isThemePurchased(_ theme: AppThemeHS) -> Bool {
         if !theme.isPremium { return true }
         return purchasedThemes.contains(theme.productID)
+    }
+
+    private func recordDailyStreak() {
+        let today = Calendar.current.startOfDay(for: Date())
+        if let last = profile.lastStreakDate, Calendar.current.isDate(last, inSameDayAs: today) {
+            return
+        }
+        profile.streakDays = max(1, profile.streakDays + 1)
+        profile.lastStreakDate = today
+        recordDailyActivity()
     }
 
     func incrementStreak() {
@@ -269,6 +282,7 @@ class ViewModelHS: ObservableObject {
         if let d = try? JSONEncoder().encode(sins) { UserDefaults.standard.set(d, forKey: sinsKey) }
         if let d = try? JSONEncoder().encode(Array(purchasedThemes)) { UserDefaults.standard.set(d, forKey: purchasesKey) }
         if let d = try? JSONEncoder().encode(dailyActivity) { UserDefaults.standard.set(d, forKey: activityKey) }
+        if let d = try? JSONEncoder().encode(libraryEntries) { UserDefaults.standard.set(d, forKey: libraryKey) }
     }
 
     private func loadAll() {
@@ -289,6 +303,9 @@ class ViewModelHS: ObservableObject {
         }
         if let d = UserDefaults.standard.data(forKey: activityKey), let a = try? JSONDecoder().decode([DailyActivityHS].self, from: d) {
             dailyActivity = a
+        }
+        if let d = UserDefaults.standard.data(forKey: libraryKey), let l = try? JSONDecoder().decode([LibraryEntryHS].self, from: d) {
+            libraryEntries = l
         }
     }
 }
